@@ -3,8 +3,8 @@
     <h3>Register</h3>
 
     <!-- VALIDATION ERRORS-->
-    <div class="alert alert-danger" v-for="(validationError, fieldName) in validationErrors" :key="`validation-errors-${fieldName}`">
-      {{ `${fieldName}: ${validationError[0]}` }}
+    <div v-if="validationErrors" class="alert alert-danger">
+      <p v-for="(error, i) in validationErrors" :key="i"> {{ error[0] }}</p>
     </div>
 
     <!-- Loading displaying -->
@@ -66,7 +66,9 @@ export default {
       .catch((error) => {
         console.dir(error);
         if (error.response && error.response.status === 422) {
-          this.validationErrors = Object.assign({}, {}, error.response.data.errors);
+          this.validationErrors = error.response.data.errors;
+          console.log('Below is the new validation error:');
+          console.dir(this.validationErrors);
         } else {
           console.dir(error);
         }
